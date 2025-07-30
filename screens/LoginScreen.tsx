@@ -1,15 +1,24 @@
 import { TextInput, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
-
-// 1. Import the loginUser function from your service file
 import { loginUser } from '../services/authService'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const LoginScreen = () => {
+
+// Define the navigation props for type safety
+type RootStackParamList = {
+  Login: undefined;
+  Register: undefined;
+};
+
+type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
+
+// Add navigation prop here
+const LoginScreen = ({ navigation }: { navigation: LoginScreenNavigationProp }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // 2. Implement the login function correctly
+  //  Implement the login function correctly
   const handleLogin = async () => {
     if (email === '' || password === '') {
         Alert.alert("Login Error", "Please enter both email and password.");
@@ -18,8 +27,6 @@ const LoginScreen = () => {
     try {
         const userCredential = await loginUser(email, password);
         console.log("User logged in successfully!", userCredential.user.uid);
-        // After successful login, the app should navigate to the ProfileScreen.
-        // We will handle this in the next navigation step.
     } catch (error) {
         console.error("Login failed:", error);
         Alert.alert("Login Error", "The email or password you entered is incorrect. Please try again.");
@@ -48,15 +55,20 @@ const LoginScreen = () => {
             secureTextEntry={true}
             />
 
-        {/* 3. The button now calls our new, robust function */}
+        
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
+        
 
-        {/* TODO: Add Register Navigation */}
+        {/* The navigation link to the Register screen */}
+        <TouchableOpacity style={{marginTop: 20}} onPress={() => navigation.navigate('Register')}>
+            <Text style={{textAlign: 'center', color: 'blue', textDecorationLine: 'underline'}}>
+                Don't have an account? Register
+            </Text>
+        </TouchableOpacity>
 
       </View>  
-      
     </SafeAreaView>
   )
 }

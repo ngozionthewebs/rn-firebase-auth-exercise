@@ -1,16 +1,21 @@
 import { TextInput, SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-// 1. The import goes at the top of the file.
 import { registerUser } from '../services/authService';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const RegistrationScreen = () => {
-  // These state variables only exist inside the RegistrationScreen component
+// Define the navigation props
+type RootStackParamList = {
+  Login: undefined;
+  Register: undefined;
+};
+
+type RegistrationScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Register'>;
+
+const RegistrationScreen = ({ navigation }: { navigation: RegistrationScreenNavigationProp }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // 2. The register function goes INSIDE the component so it can see email and password.
   const register = () => {
-    // Now it can access the state variables correctly.
     registerUser(email, password);
   }
 
@@ -40,12 +45,18 @@ const RegistrationScreen = () => {
             <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
 
+
+        {/* The navigation link to the Login screen */}
+        <TouchableOpacity style={{marginTop: 20}} onPress={() => navigation.navigate('Login')}>
+            <Text style={{textAlign: 'center', color: 'blue', textDecorationLine: 'underline'}}>
+                Already have an account? Login
+            </Text>
+        </TouchableOpacity>
+
       </View>  
-      
     </SafeAreaView>
   )
 }
-
 export default RegistrationScreen
 
 const styles = StyleSheet.create({
