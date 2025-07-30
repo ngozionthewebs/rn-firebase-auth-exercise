@@ -7,7 +7,9 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
 
   //   TODO: Login Function
-  const login = () => {}
+  const login = () => {
+    loginUser(email, password);
+  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
